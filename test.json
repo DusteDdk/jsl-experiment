@@ -1,0 +1,105 @@
+["form",
+	"'A very strange 'language' that is hosted in json for some reason.",
+	"' String starting with ' are literals, otherwise they're variables",
+
+	"' [def, NAME, VALUE]",
+	"' Sets a variable, here we define a number called... number, with the",
+	"' value being the result of some additions and subtractions.",
+	["def", "'number",
+		["+", ["nth", 1, "args"],2,3,
+			["-", 3,4,5]]],
+
+
+	"' [print ...ARGUMENTS]",
+	"'  Prints out the arguments to the standard output, followed by a linebreak",
+	["print", "'The magic number is ", "number"],
+
+	"' [' ...ARGUMENTS] ",
+	"' Returns a list containing the literal arguments, they have not been evaluated.",
+	"' This is useful for passing un-evaluated forms to the cond function.",
+	["def", "'numbers to sum",
+		["'", 1,2,3,4,5,6,7,8,9]],
+
+	"' [spread, FUNCITON_NAME, LIST]",
+	"' Calls the function with each element of the list as arguments.",
+	["print", "'Applied function result: ",
+		["spread", "'+", "numbers to sum"]],
+
+	["print", "'Applied function result: ",
+		["spread", "'+", ["'", 1, 2]]],
+
+
+	"' [cond BOOLISH, FORMS]",
+	"' Evaluate the first form in FORMS if BOOLISH is truthy",
+	"' Evaluate the second form in FORMS if BOOLISH is falsy",
+	["cond", "number", ["'",
+			["def", "'the point", "'not zero..."],
+			["def", "'the point", "'zero.."]]],
+
+	"' Note how ' makes the string be printed out, while the second item in the list is treated as a variable",
+	["print", "'The point is that the magic number is ", "the point"],
+
+	"' The variable 'another point' is a list of evaluated values",
+	["def", "'another point",
+		["cond", "number", ["'",
+			["list", "'the moot is point for the number is ", "number",
+				"' and the number + 1 is: ", ["+", 1, "number"]],
+			["list", "'the point is not moot, number is ", "number"]]]],
+
+	["spread", "'print", "another point"],
+
+	"' [fun NAME ARGUMENTS FORMS]",
+	"' Create a function of NAME that takes arguments that are available by the names in the ARGUMENTS list",
+	"' When the function is called, its FORMS are evaluated.",
+	["fun", "'myFun", ["list", "'arga", "'argb"], ["'",
+		["print", "'Function myFunc called with argument a = ", "arga", "' and argument b = ", "argb"],
+		["print", "'Adding them together yields ", ["+", "arga", "argb"]]
+	]],
+
+	["myFun", 14, 25],
+
+	["fun", "'add", ["'", "a", "b"], ["'",
+		["+", "a", "b"]]],
+
+	["print", "'Function 'add' recursively adding [ [2,2], [1, [2,3]]]  = ",  ["add", ["add",2,2], ["add", 1, ["add", 2,3]]]],
+
+
+	["fun", "'fib", ["'", "n"], ["'",
+			["cond", ["lt", "n", 2], ["'", 
+				["form","n"],
+				["+",
+					["fib", ["-", "n", 1]],
+					["fib", ["-", "n", 2]]
+				]]]]],
+
+	"' [exec VARIABLE]",
+	"' Execute the form stored in the variable and return the result.",
+	"' This can be used to implement functions that takes other functions as arguments",
+	"' And calls them. The 'for' loop below takes three such arguments:",
+	"' comp: A form that determines if the loop should continue",
+	"' op: The operation that modifies n during each iteration",
+	"' prg: The form to execute each time comp evaluates to false.",
+	["fun", "'for", ["'", "n", "comp", "op", "prg"], ["'",
+		["cond", ["exec", "comp"], ["'",
+			["form"],
+			["for", ["exec", "op"],"comp", "op", "prg", ["exec", "prg"]]]]]],
+
+
+
+	["for", 0, ["'", ["eq", "n", 10]], ["'", ["+", "n", 1]], ["'", 
+			["print",
+				"'Fibonacci sequence, position ",
+				"n",
+				"' => ",
+				["fib", "n"]]]],
+
+	["def", "'my first array",
+		["list", 1,2,3, "'four"]],
+
+	["print", ["nth", 2, "my first array"]],
+
+	["def", "'my second array",
+		["'", 1,2,3,"four"]],
+
+	["print", ["nth", 3, "my second array"]]
+]
